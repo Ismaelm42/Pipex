@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:09 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/22 11:47:12 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/03/22 14:08:32 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	pipex(char **argv, char **envp)
 	else
 	{
 		wait(NULL);
+		//si se mata el hijo con exit no es necesario usarlo se supone.
 		close(fd[1]);
 		read(fd[0], buffer, 100);
 		close(fd[0]);

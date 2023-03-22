@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:19 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/22 13:27:34 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:11:00 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,18 +100,59 @@ waitpid:
 	(espera a que un proceso cambie de estado)
 
 ideas:
+
+
 	Echar un vistazo a algún proyecto si el ft_search_path es demasiado complejo o
 empezar el proyecto directamente.
-
 	Antes que nada necesitamos lo primero comprobar los permisos con ACCESS y las flags.
+Abrir el archivo con Open y cambiar el fd de lectura del pipe para que coja directamente del infile.
 También deberíamos crear el archivo outfile.
-
-	ft_search_path
+	Crear una función para encontrar la variable de entorno $PATH = ft_search_path
+Se puede hacer esto con un while.
 Tiene que buscar la variable de entorno PATH y sacar con un split todos los directorios.
-(Separados por :)
-Ver cómo implementar esto.
-
+(Separados por :) Ver cómo implementar esto.
+Verificar: Entiendo que para encontrar el PATH de un ejecutable tendrá que probar a ver si encuentra el comando en cada una de las carpetas y cuando acceda entonces ejecturar execve().
 	Sólo necesitamos de un fork. El otro proceso se puede hacer en el proceso parent.
-Utilizar el exit para matar un proceso. El proceso enviado por el pipe de STDIN/STDOUT al fd[] y del fd[] output.
+Utilizar el exit para matar un proceso es una opción.
+	El proceso debe ser enviado por el pipe de STDIN/STDOUT al fd[] y del fd[] al outfile. (No utilizar buffer).
+
+La estructura de funciones sería:
+
+int		main(int argc, char **argv, char **envp);
+void	*ft_search_parth();
+void	*pipex();
+void	*free_malloc();
+void	*child_process();
+void	*parent_process();
+
+MAOCS PATH
+
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.KBOVQb87NU/Listeners
+LC_TERMINAL_VERSION=3.4.15
+COLORFGBG=7;0
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+LANG=en_US.UTF-8
+PWD=/Users/imoro-sa/Documents/Pipex
+SHELL=/bin/zsh
+SECURITYSESSIONID=186a7
+TERM_PROGRAM_VERSION=3.4.15
+TERM_PROGRAM=iTerm.app
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:/usr/local/munki:~/.dotnet/tools:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+LC_TERMINAL=iTerm2
+COLORTERM=truecolor
+COMMAND_MODE=unix2003
+TERM=xterm-256color
+HOME=/Users/imoro-sa
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cg1h0033rc/T/
+USER=imoro-sa
+XPC_SERVICE_NAME=0
+LOGNAME=imoro-sa
+LaunchInstanceID=1498C25F-6B16-4627-9667-129400DF45BF
+__CF_USER_TEXT_ENCODING=0x0:0:0
+ITERM_SESSION_ID=w0t0p0:C9D9C034-4236-4BCD-AE38-D8B22388DFB7
+SHLVL=1
+OLDPWD=/Users/imoro-sa/Documents
+_=/Users/imoro-sa/Documents/Pipex/./a.out
 
 */

@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:46:55 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/22 12:09:00 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/03/22 16:14:40 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,17 @@ void	pipex(char **argv, char **envp)
 	}
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char **envp)
 {
-	char	*envp[2] = {"PATH=$/bin/", NULL};
-
-	if (argc > 0)
+	//pipex(argv, envp);
+	int	i = argc;
+	i = 1;
+	char *str = argv[2];
+	str = NULL;
+	while (envp[i] != NULL)
 	{
-		pipex(argv, envp);
+		printf("%s\n", envp[i]);
+		i++;
 	}
 	return (0);
 }
