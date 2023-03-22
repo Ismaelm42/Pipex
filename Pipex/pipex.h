@@ -110,7 +110,8 @@ También deberíamos crear el archivo outfile.
 	Crear una función para encontrar la variable de entorno $PATH = ft_search_path
 Se puede hacer esto con un while.
 Tiene que buscar la variable de entorno PATH y sacar con un split todos los directorios.
-(Separados por :) Ver cómo implementar esto.
+(Separados por :) Ver cómo implementar esto. Una vez hecho esto, habrá que ver si access reconoce el directorio.
+Si lo encuentra, reconoce, entonces adelante -> execve. Si no lo encuentra, entonces habrá que seguir buscando o retornar un error.
 Verificar: Entiendo que para encontrar el PATH de un ejecutable tendrá que probar a ver si encuentra el comando en cada una de las carpetas y cuando acceda entonces ejecturar execve().
 	Sólo necesitamos de un fork. El otro proceso se puede hacer en el proceso parent.
 Utilizar el exit para matar un proceso es una opción.
