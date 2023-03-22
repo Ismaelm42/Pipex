@@ -1,6 +1,10 @@
 NAME = pipex
 
-LIBFT = ./Libft/
+LIBFT_PATH = ./Libft/
+
+LIBFT = Libft
+
+LIBFT.A = libft.a
 
 SRC = pipex.c 
 

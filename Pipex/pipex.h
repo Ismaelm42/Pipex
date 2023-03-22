@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 11:47:19 by imoro-sa          #+#    #+#             */
+/*   Updated: 2023/03/22 13:27:34 by imoro-sa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -35,6 +47,7 @@ access:
 	W_OK = Write
 	X_OK = Execute permissions
 	retorna 0 si está todo ok, sino retorna -1 y se activa errno
+	-(utilizarlo para acceder a un archivo con las flags para saber si podemos acceder a él, concretamente usarlo para encontrar el PATH)-
 
 dup:
 		int dup(int oldfd);
@@ -64,8 +77,7 @@ fork:
 	child process id = 0
 	parent process id != 0.
 	child process es el primero en ejecutarse.
-
-
+	-(se puede realizar el proyecto con un fork y dos pipes o tres)-
 pipe:
 		int pipe(int pipefd[2]);
 	(crea un pipe)
@@ -88,7 +100,18 @@ waitpid:
 	(espera a que un proceso cambie de estado)
 
 ideas:
+	Echar un vistazo a algún proyecto si el ft_search_path es demasiado complejo o
+empezar el proyecto directamente.
 
-DEFAULT=$/bin/
+	Antes que nada necesitamos lo primero comprobar los permisos con ACCESS y las flags.
+También deberíamos crear el archivo outfile.
+
+	ft_search_path
+Tiene que buscar la variable de entorno PATH y sacar con un split todos los directorios.
+(Separados por :)
+Ver cómo implementar esto.
+
+	Sólo necesitamos de un fork. El otro proceso se puede hacer en el proceso parent.
+Utilizar el exit para matar un proceso. El proceso enviado por el pipe de STDIN/STDOUT al fd[] y del fd[] output.
 
 */

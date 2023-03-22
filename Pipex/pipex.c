@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/22 11:46:55 by imoro-sa          #+#    #+#             */
+/*   Updated: 2023/03/22 12:09:00 by imoro-sa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 
 $> < archivo1 comando1 | comando2 > archivo2
@@ -5,9 +17,9 @@ $> < archivo1 comando1 | comando2 > archivo2
 $> ./pipex infile "ls -l" "wc -l" outfile
 $> ./pipex infile "grep a1" "wc -w" outfile
 
-*/
-
 //void	ft_free(char	**argv)
+
+*/
 
 #include "pipex.h"
 #include "Libft/libft.h"
@@ -28,12 +40,9 @@ char	**ft_cmd(char **argv)
 void	pipex(char **argv, char **envp)
 {
 	char	**argv_cmd;
-	char	**argv2_cmd;
 	char	buffer[100];
 	int		pid;
-	int		pid2;
 	int		fd[2];
-	int		fd2[2];
 
 	argv_cmd = ft_cmd(argv);
 	if (pipe(fd) == -1)
@@ -59,10 +68,8 @@ void	pipex(char **argv, char **envp)
 
 int	main(int argc, char **argv)
 {
-	char	*envp[2];
+	char	*envp[2] = {"PATH=$/bin/", NULL};
 
-	envp[1] = "PATH=$/bin/";
-	envp[2] = NULL;
 	if (argc > 0)
 	{
 		pipex(argv, envp);
