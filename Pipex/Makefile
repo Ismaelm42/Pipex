@@ -10,52 +10,40 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+NAME = a.out
 
-LIBFT_PATH = ./Libft/
-
-LIBFT = Libft
-
-LIBFT.A = libft.a
-
-SRC = pipex.c 
+SRC = pipex.c
 
 OBJT = $(SRC:.c=.o)
 
-CC = gcc
+LIBFT = libft/libft.a
 
-MAKEFLAGS += --quiet
+CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-AR = ar rcs
-
 RM = rm -f
 
-COLOUR = \033[0;96m
-COLOUR_END = \033[0m
+MAKEFLAGS += --quiet
 
-$(NAME): libft
-	@${CC} ${CFLAGS} ${SRC} -L ${LIBFT} -lft -o ${NAME}
-#	-L = Opción que indica al compilador dónde encontrar la biblioteca personalizada.
-#	-lft = Opción que especifica el nombre de la biblioteca vinculada al programa. El prefijo lib y la extensión .a se omiten por convención.
-#	-o = Opción que especifica el nombre del archivo ejecutable que se generará después de compilar.
-	@echo "$(COLOUR)Compiled!$(COLOUR_END)"
+all: $(LIBFT) $(NAME)
 
-all: $(NAME)
+$(LIBFT):
+	make -C ./libft
 
-libft:
-	@make -C ${LIBFT}
+$(NAME): $(LIBFT) $(OBJT)
+	${CC} $(CFLAGS) $(SRC) $(LIBFT) -o ${NAME}
 
 clean:
-	@make clean -C ${LIBFT}
-	@$(RM) $(OBJT)
+	$(RM) $(OBJT)
+	make -C ./libft clean
 
 fclean: clean
-	@make fclean -C ${LIBFT}
-	@$(RM) $(NAME)
+	$(RM) $(NAME)
+	make -C ./libft fclean
 
-re: fclean all clean
-#	@echo "$(COLOUR)all rebuilt and *.o cleaned!$(COLOUR_END)"
+re: fclean all
+	make clean
+#eliminar make clean para la entrega.
 
 .PHONY : all clean fclean re

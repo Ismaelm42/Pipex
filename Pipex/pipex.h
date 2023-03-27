@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -14,15 +15,31 @@
 # define PIPEX_H
 
 # include <stdio.h>
+# include <fcntl.h>
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include "Libft/libft.h"
+# include "libft/libft.h"
 
-void	ft_pipex(char **argv);
-char	**ft_cmd(char **argv);
+void	pipex(char **argv, char	**envp);
+char	**ft_search_path(char *cmd, char **envp);
+void	child_process(int *fd, char **argv, char **envp);
+void	parent_process(int *fd, char **argv, char **envp);
+// void	*free_malloc();
+
+
+
+
+// char	**ft_cmd(char **argv);
+// void	pipex(char **argv, char **envp);
+
+
+
+
+
+
 #endif
 
 /*
@@ -33,11 +50,9 @@ perror:
 	comprobar en man si errno se activa con la función utilizada.
 	se utiliza para escribir un mensaje de error claro.
 	fopen retorna NULL en el fd, errno -> "error al abrir el fichero"
-
 strerror:
 		char *strerror(int errnum);
 	(imprime por pantalla el mensaje de error del int que le pasemos)
-
 access:
 		int access(const char *pathname, int mode);
 	(comprueba los permisos de un usuario para acceder a un archivo)
@@ -48,7 +63,6 @@ access:
 	X_OK = Execute permissions
 	retorna 0 si está todo ok, sino retorna -1 y se activa errno
 	-(utilizarlo para acceder a un archivo con las flags para saber si podemos acceder a él, concretamente usarlo para encontrar el PATH)-
-
 dup:
 		int dup(int oldfd);
 	(duplica un fd)
@@ -58,18 +72,15 @@ dup2:
 		int dup(int oldfd, int newfd);
 	(duplica un fd en el fd que queramos)
 	retorna el fd si todo está ok, sino retorna -1 y se activa errno
-
 execve:
 		int execve(const char *pathname, char *const argv[], char *const envp[]);
 	(ejecuta un programa)
 	el programa que se ejecuta reemplazará el actual.
 	argv debe empezar con el nombre del programa que se va a ejecutar y acabar con NULL.
 	no retorna nada si se realiza correctamente. si hay error retorna -1 y se activa errno.
-
 exit:
 		void exit(int status);
 	(termina el proceso en curso)
-
 fork:
 		pid_t fork(void);
 	(crea un proceso child)
@@ -84,7 +95,6 @@ pipe:
 	abre los fd 0 y 1 y los duplica en el child process por lo que se deben cerrar después de usarlos.
 	no se puede usar el mismo pipe para read and write bilateralmente entre child y parent.
 	no retorna nada si se realiza correctamente. si hay error retorna -1 y se activa errno.
-
 unlink:
 	(llama a la función unlink para borrar un archivo determinado)
 		
@@ -94,14 +104,10 @@ wait:
 	se puede utilizar para esperar a que un child process termine de ejecutarse,
 	y asi no se ejecute en paralelo o de forma caótica con un parent process.
 	wait(NULL) al final del programa espera a que todos los child process se ejecuten.
-
 waitpid:
 		pid_t waitpid(pid_t pid, int *wstatus, int options);
 	(espera a que un proceso cambie de estado)
-
 ideas:
-
-
 	Echar un vistazo a algún proyecto si el ft_search_path es demasiado complejo o
 empezar el proyecto directamente.
 	Antes que nada necesitamos lo primero comprobar los permisos con ACCESS y las flags.
@@ -116,18 +122,14 @@ Verificar: Entiendo que para encontrar el PATH de un ejecutable tendrá que prob
 	Sólo necesitamos de un fork. El otro proceso se puede hacer en el proceso parent.
 Utilizar el exit para matar un proceso es una opción.
 	El proceso debe ser enviado por el pipe de STDIN/STDOUT al fd[] y del fd[] al outfile. (No utilizar buffer).
-
 La estructura de funciones sería:
-
 int		main(int argc, char **argv, char **envp);
 void	*ft_search_parth();
 void	*pipex();
 void	*free_malloc();
 void	*child_process();
 void	*parent_process();
-
 MAOCS PATH
-
 SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.KBOVQb87NU/Listeners
 LC_TERMINAL_VERSION=3.4.15
 COLORFGBG=7;0
@@ -155,5 +157,4 @@ ITERM_SESSION_ID=w0t0p0:C9D9C034-4236-4BCD-AE38-D8B22388DFB7
 SHLVL=1
 OLDPWD=/Users/imoro-sa/Documents
 _=/Users/imoro-sa/Documents/Pipex/./a.out
-
 */

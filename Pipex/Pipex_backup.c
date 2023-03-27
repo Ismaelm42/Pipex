@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_prueba.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/22 11:46:55 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/22 16:14:40 by imoro-sa         ###   ########.fr       */
+/*   Created: 2023/03/22 11:47:09 by imoro-sa          #+#    #+#             */
+/*   Updated: 2023/03/22 14:08:32 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 $> < archivo1 comando1 | comando2 > archivo2
 
 $> ./pipex infile "ls -l" "wc -l" outfile
-	“<infile ls -l | wc -l >outfile"
 $> ./pipex infile "grep a1" "wc -w" outfile
- 	“<infile grep a1 | wc -w >outfile”
-
-//void	ft_free(char	**argv)
 
 */
 
+//void	ft_free(char	**argv)
 #include "pipex.h"
 
 char	**ft_search_path(char	*cmd, char **envp)
@@ -76,8 +73,16 @@ void	child_process(int *fd, char **argv, char **envp)
 {
 	char	**path_envp;
 	int		fd_file;
+	int		stdin_save;
+	int		stdout_save;
 
 	close(fd[0]);
+	stdin_save = dup(STDIN_FILENO);
+	if (stdin_save == -1)
+		perror("Error saving stdin");
+	stdout_save = dup(STDOUT_FILENO);
+	if (stdout_save == -1)
+		perror("Error saving stdout");
 	//cierre del pipe de lectura que no utilizo;
 	path_envp = ft_search_path(argv[2], envp);
 	//array para ejecutar execve;
@@ -85,79 +90,55 @@ void	child_process(int *fd, char **argv, char **envp)
 	//apertura de archivo en fd;
 	if (fd_file == -1)
 	{
-		perror("File error");
+		perror("File error\n");
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd_file, STDIN_FILENO) == -1)
-		perror("Error redirecting pipe in 1");
+		perror("Error redirecting pipe in 1\n");
 	//dup fd de lectura redireccionado a stdin_fileno;
 	close(fd_file);
 	//cierre del fd de lectura;
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		perror("Error redirecting pipe out 1");
+		perror("Error redirecting pipe out 1\n");
 	//dup fd de salida redireccionado al pipe fd[1];
 	close(fd[1]);
 	if (execve(path_envp[0], path_envp, NULL) == -1)
-		perror("Error executing command");
+		perror("Error executing command\n");
 	//ejecuta el primer comando
+	if (dup2(stdin_save, STDIN_FILENO) == -1)
+		perror("Error restoring stdin\n");
+	if (dup2(stdout_save, STDOUT_FILENO) == -1)
+		perror("Error restoring stdout\n");
+	//reestablecer los fd STDOUT_FILENO y STDIN_FILENO
 	exit(EXIT_FAILURE);
 }
 
 void	parent_process(int *fd, char **argv, char **envp)
 {
-	int		pid;
-	int		fd_2[2];
+	char	*buffer;
 	int		fd_file;
 	int		bytes_read;
-	char	*buffer;
-	char	**path_envp;
 
-	if (pipe(fd_2) == -1)
-		perror("Error openning pipe 2");
-	pid = fork();
-	if (pid == 0)
+	argv = (char **)argv;
+	envp = (char **)envp;
+	close(fd[1]);
+	fd_file = open("outfile", O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (fd_file == -1)
 	{
-		path_envp = ft_search_path(argv[3], envp);
-		//child process reenvia la salida por fd[1] y recibimos por fd[0];
-		close(fd[1]);
-		close(fd_2[0]);
-		//cierre de los fd que no utilizo
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-			perror("Error redirecting pipe in 2");
-		//redirección de fd a stdin
-		close(fd[0]);
-		if (dup2(fd_2[1], STDOUT_FILENO) == -1)
-			perror("Error redirecting pipe out 2");
-		//redirección de stdout a fd_2;
-		close(fd_2[1]);
-		if (execve(path_envp[0], path_envp, NULL) == -1)
-			perror("Error executing command");
-		//si falla debo liberar la memoria de path_envp;
+		perror("File error 2\n");
 		exit(EXIT_FAILURE);
 	}
-	else
+	bytes_read = 1;
+	while (bytes_read > 0)
 	{
-		close(fd[0]);
-		close(fd[1]);
-		close(fd_2[1]);
-		fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
-		if (fd_file == -1)
-		{
-			perror("File error 2\n");
-			exit(EXIT_FAILURE);
-		}
-		bytes_read = 1;
-		while (bytes_read > 0)
-		{
-			buffer = malloc (sizeof(char));
-			bytes_read = read(fd_2[0], buffer, sizeof(char));
-			write(fd_file, buffer, bytes_read);
-			free(buffer);
-		}
-		close(fd_2[0]);
-		close (fd_file);
-		exit(EXIT_SUCCESS);
+		buffer = malloc (sizeof(char));
+		bytes_read = read(fd[0], buffer, bytes_read);
+		write(fd_file, buffer, bytes_read);
+		free(buffer);
 	}
+	close(fd[0]);
+	close (fd_file);
+	return ;
 }
 
 void	pipex(char **argv, char	**envp)
@@ -177,9 +158,63 @@ void	pipex(char **argv, char	**envp)
 int	main(int argc, char **argv, char **envp)
 {
 	if (argc >= 0)
+	{
 		pipex(argv, envp);
+	}
+
+
 	if (argv[argc] == NULL)
 		return (0);
 	return (0);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////// 	PARENT ANTES DE REALIZAR EL SEGUNDO FORK   //////////////////////////////////////////////////////////////////////////////////////////////////
+
+void	parent_process(int *fd, char **argv, char **envp)
+{
+	char	**path_envp;
+	int		stdin_save;
+	int		stdout_save;
+	// char	*buffer;
+	// int		fd_file;
+	// int		bytes_read;
+
+	stdin_save = dup(STDIN_FILENO);
+	stdout_save = dup(STDOUT_FILENO);
+	close(fd[1]);
+	//cierre del fd no utilizado;
+	path_envp = ft_search_path(argv[3], envp);
+	//array para ejecutar execve;
+	if (dup2(fd[0], STDIN_FILENO) == -1)
+		perror("Error redirecting pipe");
+	//dup de fd a stdin;
+	close(fd[0]);
+	//cierre del fd;
+	if (dup2(STDOUT_FILENO, fd[1]) == -1)
+		perror("Error redirecting pipe");
+	//dup de stdout a fd;
+	close(fd[1]);
+	//cierre del fd
+	if (execve(path_envp[0], path_envp, NULL) == -1)
+		perror("Error executing command 2\n");
+	//ejecuta el segundo comando
+
+	// fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	// if (fd_file == -1)
+	// {
+	// 	perror("File error 2\n");
+	// 	exit(EXIT_FAILURE);
+	// }
+	// bytes_read = 1;
+	// while (bytes_read > 0)
+	// {
+	// 	buffer = malloc (sizeof(char));
+	// 	bytes_read = read(fd[0], buffer, bytes_read);
+	// 	write(fd_file, buffer, bytes_read);
+	// 	free(buffer);
+	// }
+	// close(fd[0]);
+	// close (fd_file);
+	// return ;
+}
