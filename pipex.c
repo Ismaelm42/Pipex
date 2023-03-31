@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:09 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/22 14:08:32 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/03/30 13:35:24 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	int	fd[2];
 	int	pid;
-
+	
+	int i = 0;
+	if(argc == 1)
+	{
+		while (envp[i] != NULL)
+		{
+			printf("%s\n", envp[i]);
+			i++;
+		}
+	}
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
