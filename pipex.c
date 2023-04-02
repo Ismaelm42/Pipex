@@ -12,13 +12,33 @@
 
 #include "pipex.h"
 
+void	printing_pipe(int fd_file, int *fd_2)
+{
+	char	*buffer;
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		buffer = malloc (sizeof(char));
+		bytes_read = read(fd_2[0], buffer, sizeof(char));
+		if (bytes_read == -1)
+		{
+			perror("Error reading pipe");
+			exit(EXIT_FAILURE);
+		}
+		write(fd_file, buffer, bytes_read);
+		free(buffer);
+	}
+}
+
 void	child_process(int *fd, char **argv, char **envp)
 {
 	char	**path_envp;
 	int		fd_file;
 
 	close(fd[0]);
-	path_envp = ft_search_path(argv[2], envp);
+	path_envp = ft_path(argv[2], envp);
 	fd_file = open(argv[1], O_RDONLY, 0666);
 	if (fd_file == -1)
 	{
@@ -38,23 +58,30 @@ void	child_process(int *fd, char **argv, char **envp)
 
 void	parent_process(int *fd, char **argv, char **envp)
 {
-	int		pid;
+	pid_t	pid;
+	int		fd_file;
 	int		fd_2[2];
 
+	fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (fd_file == -1)
+	{
+		perror("File error");
+		exit(EXIT_FAILURE);
+	}
 	if (pipe(fd_2) == -1)
 		perror("Error openning pipe");
 	pid = fork();
 	if (pid == 0)
 		second_child_process(fd, fd_2, argv, envp);
 	else
-		second_parent_process(fd, fd_2, argv);
+		second_parent_process(fd, fd_2, fd_file);
 }
 
 void	second_child_process(int *fd, int *fd_2, char **argv, char **envp)
 {
 	char	**path_envp;
 
-	path_envp = ft_search_path(argv[3], envp);
+	path_envp = ft_path(argv[3], envp);
 	close(fd[1]);
 	close(fd_2[0]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
@@ -68,53 +95,14 @@ void	second_child_process(int *fd, int *fd_2, char **argv, char **envp)
 	exit(EXIT_FAILURE);
 }
 
-void	second_parent_process(int *fd, int *fd_2, char **argv)
+void	second_parent_process(int *fd, int *fd_2, int fd_file)
 {
-	int		fd_file;
-
 	close(fd[0]);
 	close(fd[1]);
 	close(fd_2[1]);
-	fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
-	if (fd_file == -1)
-	{
-		perror("File error");
-		exit(EXIT_FAILURE);
-	}
 	printing_pipe(fd_file, fd_2);
 	close(fd_2[0]);
 	close (fd_file);
 	exit(EXIT_SUCCESS);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	int	fd[2];
-	int	pid;
-	
-	int i = 0;
-	if(argc == 1)
-	{
-		while (envp[i] != NULL)
-		{
-			printf("%s\n", envp[i]);
-			i++;
-		}
-	}
-	if (argc == 5)
-	{
-		if (pipe(fd) == -1)
-			perror("Error openning pipe");
-		pid = fork();
-		if (pid == 0)
-			child_process(fd, argv, envp);
-		else
-			parent_process(fd, argv, envp);
-	}
-	else
-	{
-		ft_putendl_fd("Error: too much or too few arguments", 1);
-		exit(127);
-	}
-	return (0);
-}

@@ -31,6 +31,8 @@ OBJTBONUS= $(SRCBONUS:.c=.o)
 
 CFLAGS = -Wall -Wextra -Werror
 
+MAKEFLAGS += --quiet
+
 all: $(NAME)
 
 $(NAME): $(OBJT)

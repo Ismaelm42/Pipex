@@ -1,0 +1,19 @@
+<infile sed 's/3/2222/' | grep 'h'
+./pipex infile "sed 's/3/2222/'" "grep 'h'" outfile
+OK
+
+<infile ls -l | awk '{count++} END {print count}'
+./pipex infile "ls -l" "awk '{count++} END {print count}'" outfile
+OK
+
+<infile sed 's/And/But/' | awk '{count++} END {print count}'
+./pipex infile "sed 's/And/But/'" "awk '{count++} END {print count}'" outfile
+OK
+
+<infile ./script.sh | grep 'h'
+./pipex infile "./script.sh" "grep 'h'" outfile
+OK
+
+<infile ./script name.sh | grep 'h'
+./pipex infile "./script name.sh" "grep 'h'" outfile
+

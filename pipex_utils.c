@@ -16,10 +16,9 @@
 
 #include "pipex.h"
 
-char	**ft_search_path(char	*cmd, char **envp)
+char	**ft_path_envp(char **envp)
 {
 	char	**path_envp;
-	char	**path_cmd;
 	char	*str;
 	int		i;
 
@@ -33,42 +32,59 @@ char	**ft_search_path(char	*cmd, char **envp)
 	str = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 4);
 	path_envp = ft_split(str, ':');
 	free(str);
-	path_cmd = ft_split(cmd, ' ');
-	i = 0;
-	while (path_envp[i] != NULL)
-	{
-		str = ft_strjoin(path_envp[i], "/");
-		str = ft_strjoin(str, path_cmd[0]);
-		if (access(str, F_OK | X_OK) == 0)
-			break ;
-		i++;
-	}
-	if (path_envp[i] == NULL)
+	return (path_envp);
+}
+
+int	ft_check_access(char *str, char *path_envp)
+{
+	if (path_envp == NULL)
 	{
 		perror("Command not found");
 		exit(EXIT_FAILURE);
 	}
-	free(path_cmd[0]);
-	path_cmd[0] = str; 
-	return (path_cmd);
+	if (access(str, F_OK) != 0)
+		return (1);
+	if (access(str, F_OK) == 0 && access(str, X_OK) != 0)
+	{
+		perror("PATH access error");
+		exit(EXIT_FAILURE);
+	}
+	if (access(str, F_OK | X_OK) == 0)
+		return (0);
+	return (1);
 }
 
-void	printing_pipe(int fd_file, int *fd_2)
+char	**ft_path_comd(char	**path_comd, char **path_envp)
 {
-	char	*buffer;
-	int		bytes_read;
+	char	*str;
+	int		n;
 
-	bytes_read = 1;
-	while (bytes_read > 0)
+	n = 0;
+	str = path_comd[0];
+	//una vez arreglado esto debería estar. Ahora mismo está funcional realmente.
+	//tiene comportamiento totalmente aleatorio. A veces crea un fichero otras no.
+	while (ft_check_access(str, path_envp[n]) != 0)
 	{
-		buffer = malloc (sizeof(char));
-		bytes_read = read(fd_2[0], buffer, sizeof(char));
-		if (bytes_read == -1)
-		{
-			perror("Error reading pipe");
-			exit(EXIT_FAILURE);
-		}
-		write(fd_file, buffer, bytes_read);
-		free(buffer);
+			str = ft_strjoin(path_envp[n], "/");
+			str = ft_strjoin(str, path_comd[0]);
+			n++;
 	}
+	if (str != path_comd[0])
+	{
+		free(path_comd[0]);
+		path_comd[0] = str;
+		return (path_comd);
+	}
+	else
+		return (path_comd);
+}
+
+char	**ft_path(char	*comd, char **envp)
+{
+	char	**path_comd;
+	char	**path_envp;
+
+	path_comd = ft_pipex_splitter(comd);
+	path_envp = ft_path_envp(envp);
+	return (ft_path_comd(path_comd, path_envp));
 }

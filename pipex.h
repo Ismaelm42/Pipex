@@ -25,20 +25,15 @@
 void	child_process(int *fd, char **argv, char **envp);
 void	parent_process(int *fd, char **argv, char **envp);
 void	second_child_process(int *fd, int *fd_2, char **argv, char **envp);
-void	second_parent_process(int *fd, int *fd_2, char **argv);
+void	second_parent_process(int *fd, int *fd_2, int fd_file);
 
-int	ft_string_counter(char const *s);
-
-
-
-
-
+char	**ft_path_envp(char **envp);
+char	**ft_path_comd(char	**path_comd, char **path_envp);
+char	**ft_path(char	*comd, char **envp);
+int		ft_check_access(char *str, char *path_envp);
 
 
-
-
-
-char	**ft_search_path(char *comd, char **envp);
+char	**ft_pipex_splitter(char *str);
 void	printing_pipe(int fd_file, int *fd_2);
 
 #endif

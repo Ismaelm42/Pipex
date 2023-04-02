@@ -12,7 +12,7 @@
 
 NAME = pipex
 
-SRC = pipex.c	pipex_utils.c
+SRC = pipex.c	pipex_utils.c	pipex_splitter.c	main.c
 
 OBJT = $(SRC:.c=.o)
 
