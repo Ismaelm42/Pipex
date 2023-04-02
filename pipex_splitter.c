@@ -82,7 +82,7 @@ int	ft_advance(char *str, int len, int i)
 	while (str[i] == 32)
 		i++;
 	if ((str[i] == '\'' || str[i] == '"')
-		&& ft_strnstr(str, "afefewk", ft_strlen(str)) == NULL)
+		/*&& ft_strnstr(str, "awk", ft_strlen(str)) != NULL*/)
 			i++;
 	//ver si esto del awk es un error en linux. Funciona correctamente pero comandos como sed necesitan también no tener comillas
 	return (i);
@@ -118,7 +118,7 @@ char	**ft_pipex_splitter(char *str)
 
 // int	main(void)
 // {
-// 	char	str[] = "awk '{count++} END {print count}'";
+// 	char	str[] = "tr 'a' 'A'";
 // 	char	**ptr;
 // 	int		i = 0;
 

@@ -61,8 +61,8 @@ char	**ft_path_comd(char	**path_comd, char **path_envp)
 
 	n = 0;
 	str = path_comd[0];
-	//una vez arreglado esto debería estar. Ahora mismo está funcional realmente.
-	//tiene comportamiento totalmente aleatorio. A veces crea un fichero otras no.
+	if (ft_strchr(str, '/') != NULL && ft_strchr(str, ' ') != NULL)
+		str = ft_strtrim(str, "'");
 	while (ft_check_access(str, path_envp[n]) != 0)
 	{
 			str = ft_strjoin(path_envp[n], "/");
@@ -75,8 +75,7 @@ char	**ft_path_comd(char	**path_comd, char **path_envp)
 		path_comd[0] = str;
 		return (path_comd);
 	}
-	else
-		return (path_comd);
+	return (path_comd);
 }
 
 char	**ft_path(char	*comd, char **envp)

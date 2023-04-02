@@ -105,4 +105,3 @@ void	second_parent_process(int *fd, int *fd_2, int fd_file)
 	close (fd_file);
 	exit(EXIT_SUCCESS);
 }
-

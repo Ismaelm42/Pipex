@@ -14,6 +14,8 @@ OK
 ./pipex infile "./script.sh" "grep 'h'" outfile
 OK
 
-<infile ./script name.sh | grep 'h'
-./pipex infile "./script name.sh" "grep 'h'" outfile
+<infile './script name.sh' | grep 'h'
+./pipex infile "'./script name.sh'"  "grep 'h'" outfile
 
+<infile sed "s/And/But/" | awk '{count++} END {printf "count: %i" , count}'
+./pipex infile "sed 's/And/But/'" "awk '{count++} END {printf \\"count: %i\\" , count}'"

@@ -32,7 +32,6 @@ char	**ft_path_comd(char	**path_comd, char **path_envp);
 char	**ft_path(char	*comd, char **envp);
 int		ft_check_access(char *str, char *path_envp);
 
-
 char	**ft_pipex_splitter(char *str);
 void	printing_pipe(int fd_file, int *fd_2);
 
