@@ -6,13 +6,9 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:02 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/31 17:22:47 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/03 12:43:34 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//  infile "ls -l" "awk '{count++} END {print count}'" outfile
-//	/usr/bin/awk ''
-//	/bin/ls -l
 
 #include "pipex.h"
 
@@ -35,18 +31,19 @@ char	**ft_path_envp(char **envp)
 	return (path_envp);
 }
 
-int	ft_check_access(char *str, char *path_envp)
+int	ft_check_access(char *str, char *path_envp, char *path_comd)
 {
 	if (path_envp == NULL)
 	{
-		perror("Command not found");
+		ft_putstr_fd("command not found: ", 2);
+		ft_putstr_fd(path_comd, 2);
 		exit(EXIT_FAILURE);
 	}
 	if (access(str, F_OK) != 0)
 		return (1);
 	if (access(str, F_OK) == 0 && access(str, X_OK) != 0)
 	{
-		perror("PATH access error");
+		ft_putstr_fd("PATH access error", 2);
 		exit(EXIT_FAILURE);
 	}
 	if (access(str, F_OK | X_OK) == 0)
@@ -63,7 +60,7 @@ char	**ft_path_comd(char	**path_comd, char **path_envp)
 	str = path_comd[0];
 	if (ft_strchr(str, '/') != NULL && ft_strchr(str, ' ') != NULL)
 		str = ft_strtrim(str, "'");
-	while (ft_check_access(str, path_envp[n]) != 0)
+	while (ft_check_access(str, path_envp[n], path_comd[0]) != 0)
 	{
 			str = ft_strjoin(path_envp[n], "/");
 			str = ft_strjoin(str, path_comd[0]);

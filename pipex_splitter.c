@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 12:01:29 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/31 19:49:28 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/03 14:27:31 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,8 @@ int	ft_advance(char *str, int len, int i)
 		i++;
 	while (str[i] == 32)
 		i++;
-	if ((str[i] == '\'' || str[i] == '"')
-		/*&& ft_strnstr(str, "awk", ft_strlen(str)) != NULL*/)
-			i++;
-	//ver si esto del awk es un error en linux. Funciona correctamente pero comandos como sed necesitan también no tener comillas
+	if ((str[i] == '\'' || str[i] == '"'))
+		i++;
 	return (i);
 }
 
@@ -115,21 +113,3 @@ char	**ft_pipex_splitter(char *str)
 	str_return[n] = 0;
 	return (str_return);
 }
-
-// int	main(void)
-// {
-// 	char	str[] = "tr 'a' 'A'";
-// 	char	**ptr;
-// 	int		i = 0;
-
-// 	ptr = ft_pipex_splitter(str);
-// 	printf("\n");
-// 	printf("\n");
-// 	printf("\n");
-// 	while (ptr[i] != NULL)
-// 	{
-// 		printf("%s\n", ptr[i]);
-// 		i++;
-// 	}
-// 	return (0);
-// }

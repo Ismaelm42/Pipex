@@ -6,7 +6,7 @@
 #    By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/22 14:07:25 by imoro-sa          #+#    #+#              #
-#    Updated: 2023/03/30 13:33:06 by imoro-sa         ###   ########.fr        #
+#    Updated: 2023/04/03 12:09:09 by imoro-sa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,12 +41,7 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 	make -C ./libft fclean
-	$(RM) ./pipex
-	$(RM) ./outfile
-#eliminar dos reglas finales.
 
 re: fclean all
-	make clean
-#eliminar make clean para la entrega.
 
 .PHONY : all clean fclean re

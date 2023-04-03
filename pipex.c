@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:09 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/30 13:35:24 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/03 14:12:04 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	printing_pipe(int fd_file, int *fd_2)
 		bytes_read = read(fd_2[0], buffer, sizeof(char));
 		if (bytes_read == -1)
 		{
-			perror("Error reading pipe");
+			perror("error reading pipe");
 			exit(EXIT_FAILURE);
 		}
 		write(fd_file, buffer, bytes_read);
@@ -42,17 +42,17 @@ void	child_process(int *fd, char **argv, char **envp)
 	fd_file = open(argv[1], O_RDONLY, 0666);
 	if (fd_file == -1)
 	{
-		perror("File error");
+		perror("file error");
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd_file, STDIN_FILENO) == -1)
-		perror("Error redirecting pipe");
+		perror("error redirecting pipe");
 	close(fd_file);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
-		perror("Error redirecting pipe");
+		perror("error redirecting pipe");
 	close(fd[1]);
 	if (execve(path_envp[0], path_envp, envp) == -1)
-		perror("Error executing command");
+		perror("error executing command");
 	exit(EXIT_FAILURE);
 }
 
@@ -65,11 +65,11 @@ void	parent_process(int *fd, char **argv, char **envp)
 	fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (fd_file == -1)
 	{
-		perror("File error");
+		perror("file error");
 		exit(EXIT_FAILURE);
 	}
 	if (pipe(fd_2) == -1)
-		perror("Error openning pipe");
+		perror("error openning pipe");
 	pid = fork();
 	if (pid == 0)
 		second_child_process(fd, fd_2, argv, envp);
@@ -85,13 +85,13 @@ void	second_child_process(int *fd, int *fd_2, char **argv, char **envp)
 	close(fd[1]);
 	close(fd_2[0]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
-		perror("Error redirecting pipe");
+		perror("error redirecting pipe");
 	close(fd[0]);
 	if (dup2(fd_2[1], STDOUT_FILENO) == -1)
-		perror("Error redirecting pipe");
+		perror("error redirecting pipe");
 	close(fd_2[1]);
 	if (execve(path_envp[0], path_envp, envp) == -1)
-		perror("Error executing command");
+		perror("error executing command");
 	exit(EXIT_FAILURE);
 }
 
