@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:02 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/03/31 17:22:47 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/03 12:57:51 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else
 	{
-		ft_putendl_fd("Invalid number of arguments", 2);
+		ft_putstr_fd("Invalid number of arguments", 2);
 		exit(EXIT_FAILURE);
 	}
 	return (0);
