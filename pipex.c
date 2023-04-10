@@ -12,26 +12,6 @@
 
 #include "pipex.h"
 
-void	printing_pipe(int fd_file, int *fd_2)
-{
-	char	*buffer;
-	int		bytes_read;
-
-	bytes_read = 1;
-	while (bytes_read > 0)
-	{
-		buffer = malloc (sizeof(char));
-		bytes_read = read(fd_2[0], buffer, sizeof(char));
-		if (bytes_read == -1)
-		{
-			perror("error reading pipe");
-			exit(EXIT_FAILURE);
-		}
-		write(fd_file, buffer, bytes_read);
-		free(buffer);
-	}
-}
-
 void	child_process(int *fd, char **argv, char **envp)
 {
 	char	**path_envp;
@@ -42,7 +22,7 @@ void	child_process(int *fd, char **argv, char **envp)
 	fd_file = open(argv[1], O_RDONLY, 0666);
 	if (fd_file == -1)
 	{
-		perror("file error");
+		perror(argv[1]);
 		exit(EXIT_FAILURE);
 	}
 	if (dup2(fd_file, STDIN_FILENO) == -1)
@@ -65,7 +45,7 @@ void	parent_process(int *fd, char **argv, char **envp)
 	fd_file = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (fd_file == -1)
 	{
-		perror("file error");
+		perror(argv[4]);
 		exit(EXIT_FAILURE);
 	}
 	if (pipe(fd_2) == -1)
@@ -104,4 +84,24 @@ void	second_parent_process(int *fd, int *fd_2, int fd_file)
 	close(fd_2[0]);
 	close (fd_file);
 	exit(EXIT_SUCCESS);
+}
+
+void	printing_pipe(int fd_file, int *fd_2)
+{
+	char	*buffer;
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (bytes_read > 0)
+	{
+		buffer = malloc (sizeof(char));
+		bytes_read = read(fd_2[0], buffer, sizeof(char));
+		if (bytes_read == -1)
+		{
+			perror("error reading pipe");
+			exit(EXIT_FAILURE);
+		}
+		write(fd_file, buffer, bytes_read);
+		free(buffer);
+	}
 }

@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
-			perror("Error creating pipe");
+			perror("error creating pipe");
 		pid = fork();
 		if (pid == 0)
 			child_process(fd, argv, envp);
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else
 	{
-		ft_putstr_fd("Invalid number of arguments", 2);
+		ft_putstr_fd("invalid number of arguments\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	return (0);

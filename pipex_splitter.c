@@ -14,8 +14,9 @@
 
 int	ft_str_counter(char const *s)
 {
-	int	i;
-	int	count;
+	char	c;
+	int		i;
+	int		count;
 
 	i = 0;
 	count = 0;
@@ -23,8 +24,9 @@ int	ft_str_counter(char const *s)
 	{
 		if (s[i] == '\'' || s[i] == '"')
 		{
+			c = s[i];
 			i++;
-			while (s[i] != '\'' && s[i] != '"' && s[i] != '\0')
+			while (s[i] != c && s[i] != '\0')
 				i++;
 		}
 		if (s[i] != 32 && (s[i + 1] == 32 || s[i + 1] == '\0'))
@@ -38,29 +40,32 @@ int	ft_str_counter(char const *s)
 	return (count);
 }
 
-int	ft_splitter_len(char *str, int ptr)
+char	*ft_advance(char *str)
 {
-	int		i;
+	while (*str == 32)
+		str++;
+	if (*str == '\'' || *str == '"')
+		str++;
+	return (str);
+}
 
-	i = ptr;
-	if (str[i - 1] == '\'' || str[i - 1] == '"')
-	{
-		while (str[i] != 0 && (str[i] != '\'' && str[i] != '"'))
-			i++;
-	}
-	else if (str[i] == '\'' || str[i] == '"')
-	{
-		i++;
-		while (str[i] != 0 && (str[i] != '\'' && str[i] != '"'))
-			i++;
-		i++;
-	}
-	else if (str[i - 1] == 32 || i == 0)
-	{
-		while (str[i] != 0 && str[i] != 32)
-			i++;
-	}
-	return (i - ptr);
+int	ft_splitter_len(char *str)
+{
+	int		len;
+	char	c;
+
+	len = 0;
+	c = 0;
+	if (str[len - 1] == 32 || str[len - 1] == '\'' || str[len - 1] == '"')
+		c = str[len - 1];
+	if (c != 0)
+		while (str[len] != c && str[len] != 0)
+			len++;
+	else
+		while (str[len] != 32 && str[len] != '\''
+			&& str[len] != '"' && str[len] != 0)
+				len++;
+	return (len);
 }
 
 char	**ft_free_split(char **str, int n)
@@ -74,40 +79,27 @@ char	**ft_free_split(char **str, int n)
 	return (NULL);
 }
 
-int	ft_advance(char *str, int len, int i)
-{
-	i = i + len;
-	while (str[i] != 0 && str[i] != 32)
-		i++;
-	while (str[i] == 32)
-		i++;
-	if ((str[i] == '\'' || str[i] == '"'))
-		i++;
-	return (i);
-}
-
 char	**ft_pipex_splitter(char *str)
 {
 	char	**str_return;
-	int		malloc_len;
+	int		size;
 	int		len;
-	int		i;
 	int		n;
 
-	i = 0;
 	n = 0;
-	len = 0;
-	malloc_len = ft_str_counter(str);
-	str_return = malloc(sizeof(char *) * (malloc_len + 1));
+	size = ft_str_counter(str);
+	str_return = malloc(sizeof(char *) * size);
 	if (str_return == NULL)
 		return (NULL);
-	while (n < malloc_len)
+	while (n < size)
 	{
-		len = ft_splitter_len(str, i);
-		str_return[n] = ft_substr(str, i, len);
+		str = ft_advance(str);
+		len = ft_splitter_len(str);
+		str_return[n] = ft_substr(str, 0, len);
 		if (str_return[n] == NULL)
-			return (ft_free_split(str_return, n));
-		i = ft_advance(str, len, i);
+			return (ft_free_split(str_return, n), NULL);
+		while (len-- >= 0)
+			str++;
 		n++;
 	}
 	str_return[n] = 0;
