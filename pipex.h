@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:19 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/04/11 16:50:09 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:56:06 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ int		ft_check_access(char *str, char *path_envp, char *path_comd);
 char	**ft_path_comd(char	**path_comd, char **path_envp);
 char	**ft_path(char	*comd, char **envp);
 char	**ft_pipex_splitter(char *str);
+void	ft_leaks(void);
 
 #endif
