@@ -1,61 +1,61 @@
-<infile ls -l | wc -l
+<infile ls -l | wc -l > outfile
 ./pipex infile "ls -l" "wc -l" outfile
 OK
 
-<infile grep a1 | wc -w
+<infile grep a1 | wc -w > outfile
 ./pipex infile "grep a1" "wc -w" outfile
 OK
 
-<infile sed 's/3/2222/' | grep 'h'
+<infile sed 's/3/2222/' | grep 'h' > outfile
 ./pipex infile "sed 's/3/2222/'" "grep 'h'" outfile
 OK
 
-<infile ls -l | awk '{count++} END {print count}'
+<infile ls -l | awk '{count++} END {print count}' > outfile
 ./pipex infile "ls -l" "awk '{count++} END {print count}'" outfile
 OK
 
-<infile sed 's/And/But/' | awk '{count++} END {print count}'
+<infile sed 's/And/But/' | awk '{count++} END {print count}' > outfile
 ./pipex infile "sed 's/And/But/'" "awk '{count++} END {print count}'" outfile
 OK
 
-<infile ./script.sh | grep 'h'
+<infile ./script.sh | grep 'h' > outfile
 ./pipex infile "./script.sh" "grep 'h'" outfile
 OK
 
-<infile './script name.sh' | grep 'h'
+<infile './script name.sh' | grep 'h' > outfile
 ./pipex infile "'./script name.sh'"  "grep 'h'" outfile
 OK
 
 chmod 333 'script name.sh'
-<infile './script name.sh' | grep 'h'
+<infile './script name.sh' | grep 'h' > outfile
 ./pipex infile "'./script name.sh'"  "grep 'h'" outfile
 OK
 
-<infile ls -l | tr -d ' '
+<infile ls -l | tr -d ' ' > outfile
 ./pipex infile "ls -l" "tr -d ' '" outfile
 OK
 
-<infile ls -l | cat -e
+<infile ls -l | cat -e > outfile
 ./pipex infile "ls -l" "cat -e" outfile
 OK
 
-<infile cat | wc
+<infile cat | wc > outfile
 ./pipex infile cat wc outfile
 OK
 
-<infile /bin/ls -l | /bin/cat -e
+<infile /bin/ls -l | /bin/cat -e > outfile
 ./pipex infile "/bin/ls -l" "/bin/cat -e" outfile
 OK
 
-<infile ls -lz | cat -e
+<infile ls -lz | cat -e > outfile
 ./pipex infile "ls -lz" "cat -e" outfile
 OK
 
-<infile ls -lz | ls -l
+<infile ls -lz | ls -l > outfile
 ./pipex infile "ls -lz" "ls -l" outfile
 OK
 
 #Escape characters
-<infile sed "s/And/But/" | awk '{count++} END {printf "count: %i" , count}'
+<infile sed "s/And/But/" | awk '{count++} END {printf "count: %i" , count}' > outfile
 ./pipex infile "sed 's/And/But/'" "awk '{count++} END {printf \\"count: %i\\" , count}'"
 KO

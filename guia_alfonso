@@ -28,7 +28,8 @@ Comandos complejos:
 
 
 
-./pipex infile "grep Hola" "awk '{count++} END {print count}'" outfile
+< infile grep a | awk '{count++} END {print count}' > outfile
+./pipex infile "grep a" "awk '{count++} END {print count}'" outfile
 ./pipex infile "grep Hola" "awk '{count++} END {print \$1}'" outfile
 ./pipex infile "grep Hola" "awk '{count++} END {print \$2}'" outfile 
 ./pipex infile "grep Hola" "awk '{count++} END {print \$2 \" \" count}'" outfile
