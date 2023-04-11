@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:02 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/04/03 12:43:34 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:04:21 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	**ft_path_comd(char	**path_comd, char **path_envp)
 	}
 	if (str != path_comd[0])
 	{
+		free(path_comd[0]);
 		path_comd[0] = str;
 		return (path_comd);
 	}

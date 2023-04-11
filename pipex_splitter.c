@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 12:01:29 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/04/03 14:27:31 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/11 16:27:53 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	**ft_pipex_splitter(char *str)
 
 	n = 0;
 	size = ft_str_counter(str);
-	str_return = malloc(sizeof(char *) * size);
+	str_return = malloc(sizeof(char *) * size + 1);
 	if (str_return == NULL)
 		return (NULL);
 	while (n < size)
