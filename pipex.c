@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:09 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/04/11 19:10:27 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/13 13:57:52 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,3 @@ void	printing_pipe(int fd_file, int *fd_2)
 		free(buffer);
 	}
 }
-
-// void	ft_leaks(void)
-// {
-// 	system ("leaks -q pipex");
-// }

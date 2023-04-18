@@ -6,7 +6,7 @@
 /*   By: imoro-sa <imoro-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 11:47:02 by imoro-sa          #+#    #+#             */
-/*   Updated: 2023/04/11 19:10:33 by imoro-sa         ###   ########.fr       */
+/*   Updated: 2023/04/13 12:17:54 by imoro-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	main(int argc, char **argv, char **envp)
 	int		fd[2];
 	pid_t	pid;
 
-	// atexit(ft_leaks);
 	if (argc == 5)
 	{
 		if (pipe(fd) == -1)
